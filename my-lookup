@@ -1,0 +1,36 @@
+#!/bin/bash
+#Mark A. Pascual
+#CMPS4232 - Systems Administration
+#10th November, 2022
+#Test #2
+
+#Given a file with individuals first and last names and a last name to 
+#search for, lines of names(first and last names) will be printed showing
+#matches for the given last name.
+
+if [[ "${1}" = "" || "${2}" = "" || "${#}" -gt 2 ]] #checking to see if all argument provided.
+then
+	#Output if invalid or no arguments provided.
+	echo "You need to provide two arguements for this script to work."
+	echo "Usage: my-lookup <filename> <last name to search for>"
+	echo "For example: my-lookup names.txt Smith"
+else
+	if [[ -f "${1}" || "${1}" = "ASCII" ]] #Check to see if the file provide exists.
+	then
+		linecount="$(grep -P -c "${2}" "${1}")"  #Count lines with provided lastname.
+		if [[ $linecount -eq 0 ]] #If no such lastname found then output such.
+		then
+			echo "No ${2} lastnames found in the file you supplied."
+		elif [[ $linecount -eq 1 ]] #If one lastname found.
+		then
+			echo "$linecount lastname found in the file you supplied."
+			grep -P "${2}" "${1}"  #Regular expression!
+		else
+			echo "$linecount ${2} lastnames were found." #Output if two or more lastnames found.
+			grep -P "${2}" "${1}" #Regular expression!
+		fi
+	else
+		echo "The file you supplied doesn't exist or is not a text file."  #Output if file not found.
+	fi
+	echo "Goodbye!"
+fi
